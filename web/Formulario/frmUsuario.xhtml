@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
+    http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <ui:composition template="../plantilla/formulario.xhtml">
+            <ui:define name="top">
+                Página que permite manipular los Usuarios
+            </ui:define>
+
+            <ui:define name="contenido">    
+
+                <h:form id="frmUsuario">
+
+                    <p:panel id="usuarioContenido" header="Datos del Usuario" >  
+
+                        <p:dataTable id="lstUsuario" value="#{usuarioC.lstUsuarios}" 
+                                     var="usuario"  selection="#{usuarioC.objUsuarioSel}" rowKey="#{usuario.id_usuario}"
+                                     selectionMode="single" paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20" emptyMessage="No se han encontrado registros" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PageLinks} {NextPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown}">
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Usuario">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{usuario.usuario}"/>
+                            </p:column>   
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Rol">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{usuario.id_rol}"/>
+                            </p:column>
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Acciones"/>
+                                </f:facet>
+                                <p:commandButton icon="ui-icon-pencil" title="Editar Usuario" update=":frmUpdatUsuario" onclick="PF('wglUpdatUsuario').show()">
+                                    <f:setPropertyActionListener value="#{usuario}" target="#{usuarioC.objUsuarioSel}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar Usuario" update=":frmDeletUsuario" onclick="PF('wglDeletUsuario').show()">
+                                    <f:setPropertyActionListener value="#{usuario}" target="#{usuarioC.objUsuarioSel}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton id="btnNuevo" value="Nuevo Usuario" icon="ui-icon-newwin" 
+                                                 onclick="PF('wglInsertUsuario').show()" type="button"/>
+                            </f:facet>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>           
+            </ui:define>
+
+            <ui:define name="dialogos">
+
+                <!--Insertar Usuario-->
+                <p:dialog widgetVar="wglInsertUsuario" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Insertar Usuario">
+                    <h:form id="frmInsertUsuario">
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="Usuario"/>
+                            <p:inputText id="txtUsuario" label="Usuario" requiredMessage="Ingrese el usuario" value="#{usuarioC.objUsuario.usuario}" required="true"/>                  
+
+                            <p:outputLabel value="Password"/>
+                            <p:inputText id="txtPassword" label="Password" requiredMessage="Ingrese el password" value="#{usuarioC.objUsuario.contrasenia_usuario}" required="true" type="password"/>                  
+
+                            <p:outputLabel value="Rol" />
+                            <p:selectOneMenu id="txtRol" label="Rol" requiredMessage="Ingrese el Rol" value="#{usuarioC.objUsuario.id_rol}" required="true">
+                                <f:selectItem itemLabel="Seleccione un Rol" noSelectionOption="true"/>
+                                <f:selectItems value="#{rolC.lstRoles}" var="rol" itemLabel="#{rol.descripcion_rol}" itemValue="#{rol.id_rol}"/>
+                            </p:selectOneMenu>
+
+
+
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+                        <p:commandButton value="Ingresar" action="#{usuarioC.insertarUsuario()}" update=":frmUsuario:lstUsuario" ajax="false"/>
+                        <p:commandButton value="Cerrar" onclick="wglInsertUsuario.hiden()" process="@this" type="reset"/>
+                    </h:form>
+                </p:dialog>
+
+                <!--Actualizar Usuario-->
+                <p:dialog widgetVar="wglUpdatUsuario" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Modificar Usuario">
+                    <h:form id="frmUpdatUsuario">
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="Usuario"/>
+                            <p:inputText id="txtUsuario" label="Usuario" value="#{usuarioC.objUsuarioSel.usuario}" required="true" />                       
+                           
+                            <p:outputLabel value="Password"/>
+                            <p:inputText id="txtPassword" label="Password" value="#{usuarioC.objUsuarioSel.contrasenia_usuario}" required="true" type="password"/>                  
+
+                        </p:panelGrid>   
+                        
+
+
+                        <p:separator></p:separator>
+                        <p:commandButton value="Modificar" action="#{usuarioC.actualizarUsuario()}" update=":frmUsuario:lstUsuario" ajax="false"/>
+                        <p:commandButton value="Cerrar" onclick="wglUpdatUsuario.hiden()" process="@this" type="reset"/>
+                    </h:form>
+                </p:dialog>
+
+                <!--Eliminar Usuario-->
+                <p:dialog widgetVar="wglDeletUsuario" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Eliminar Usuario">
+                    <h:form id="frmDeletUsuario">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Usuario"/>
+                            <p:inputText id="txtUsuario" label="Usuario" value="#{usuarioC.objUsuarioSel.usuario}" required="true" disabled="true"/>
+
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+                        <p:commandButton value="Eliminar" actionListener="#{usuarioC.eliminarUsuario()}" update=":frmUsuario:lstUsuario" action="./frmUsuario.xhtml" immediate="true"/>
+                        <p:commandButton value="Cerrar" action="./frmUsuario.xhtml" immediate="true"/>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>

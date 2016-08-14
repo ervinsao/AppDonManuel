@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
+    http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <ui:composition template="../plantilla/formulario.xhtml">
+            <ui:define name="top">
+                Página que permite manipular las Clasificaciones de las Materias
+            </ui:define>
+
+            <ui:define name="contenido">    
+
+                <h:form id="frmClasificacionMateria">
+
+                    <p:panel id="clasificacionMateriaContenido" header="Datos de Clasificación de Materia" >  
+
+                        <p:dataTable id="lstClasificacionMateria" value="#{clasificacionMateriaC.lstClasificacionesMaterias}" 
+                                     var="clasificacionMateria"  selection="#{clasificacionMateriaC.objClasificacionMateriaSel}" rowKey="#{clasificacionMateria.id_clasificacion_materia}"
+                                     selectionMode="single" paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20" emptyMessage="No se han encontrado registros" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PageLinks} {NextPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown}">
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Descripción:">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{clasificacionMateria.descripcion_clasificacion_materia}"/>
+                            </p:column>                      
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Acciones"/>
+                                </f:facet>
+                                <p:commandButton icon="ui-icon-pencil" title="Editar Clasificación de Materia" update=":frmUpdatClasificacionMateria" onclick="PF('wglUpdatClasificacionMateria').show()">
+                                    <f:setPropertyActionListener value="#{clasificacionMateria}" target="#{clasificacionMateriaC.objClasificacionMateriaSel}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar Clasificación de Materia" update=":frmDeletClasificacionMateria" onclick="PF('wglDeletClasificacionMateria').show()">
+                                    <f:setPropertyActionListener value="#{clasificacionMateria}" target="#{clasificacionMateriaC.objClasificacionMateriaSel}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton id="btnNuevo" value="Nuevo Clasificación de Materia" icon="ui-icon-newwin" 
+                                                 onclick="PF('wglInsertClasificacionMateria').show()" type="button"/>
+                            </f:facet>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>           
+            </ui:define>
+
+            <ui:define name="dialogos">
+                
+                <!--Insertar Clasificacion Materia-->
+                <p:dialog widgetVar="wglInsertClasificacionMateria" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Insertar Clasificación de Materia">
+                    <h:form id="frmInsertClasificacionMateria">
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="Descripcion"/>
+                            <p:inputText id="txtDescripcion" label="Descripción" requiredMessage="Ingrese la clasificación de materia" value="#{clasificacionMateriaC.objClasificacionMateria.descripcion_clasificacion_materia}" required="true"/>                  
+        
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+                        <p:commandButton value="Ingresar" action="#{clasificacionMateriaC.insertarClasificacionMateria()}" update=":frmClasificacionMateria:lstClasificacionMateria" ajax="false"/>
+                        <p:commandButton value="Cerrar" onclick="wglInsertClasificacionMateria.hiden()" process="@this" type="reset"/>
+                    </h:form>
+                </p:dialog>
+
+                <!--Actualizar Clasificacion Materia-->
+                <p:dialog widgetVar="wglUpdatClasificacionMateria" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Modificar Clasificación de Materia">
+                    <h:form id="frmUpdatClasificacionMateria">
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="Descripcion"/>
+                            <p:inputText id="txtDescripcion" label="Descripción" value="#{clasificacionMateriaC.objClasificacionMateriaSel.descripcion_clasificacion_materia}" required="true" />                       
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+
+                        <p:commandButton value="Modificar" action="#{clasificacionMateriaC.actualizarClasificacionMateria()}" update=":frmClasificacionMateria:lstClasificacionMateria" ajax="false"/>
+                        <p:commandButton value="Cerrar" onclick="wglUpdatClasificacionMateria.hiden()" process="@this" type="reset"/>
+                    </h:form>
+                </p:dialog>
+
+                <!--Eliminar Clasificacion Materia-->
+                <p:dialog widgetVar="wglDeletClasificacionMateria" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Eliminar Clasificacion Materia">
+                    <h:form id="frmDeletClasificacionMateria">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Descripcion"/>
+                            <p:inputText id="txtDescripcion" label="Descripción" value="#{clasificacionMateriaC.objClasificacionMateriaSel.descripcion_clasificacion_materia}" required="true" disabled="true"/>
+
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+                        <p:commandButton value="Eliminar" actionListener="#{clasificacionMateriaC.eliminarClasificacionMateria()}" update=":frmClasificacionMateria:lstClasificacionMateria" action="./frmClasificacionMateria.xhtml" immediate="true"/>
+                        <p:commandButton value="Cerrar" action="./frmPersona.xhtml" immediate="true"/>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
+   

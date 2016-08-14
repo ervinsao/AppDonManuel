@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
+    http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <p:layout fullPage="true">
+            <p:layoutUnit position="east" size="110" gutter="4">
+                <p:panel header="Login" style="width:90px">
+                    <h:panelGrid columns="2" cellpadding="5">
+                        <h:outputLink value="javascript:void(0)" onclick="PF('dlg').show();" title="login">
+                            <p:graphicImage name="/images/ima.png"  style="width: 60px; height:60px"/>
+                        </h:outputLink>
+                    </h:panelGrid>
+                </p:panel>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="center" size="50" gutter="1"  collapsible="true"> 
+                <center>  <p:graphicImage name="/images/logo.png"  style="width: 490px; height:130px"/></center>
+
+            </p:layoutUnit>
+            <p:layoutUnit position="south" size="500" id="sur" gutter="1">
+                <center><p:megaMenu  style="margin-top:20px">
+
+                        <p:submenu label="Inicio" icon="ui-icon-check">
+                            <p:column>
+                                <p:submenu label="Inicio ">
+                                    <p:menuitem value="Inicio" url="/faces/index.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                                                
+                        <p:submenu label="Misión Visión" icon="ui-icon-check">
+                            <p:column>
+                                <p:submenu label="Misión y Visión">
+                                    <p:menuitem value="Misión" url="/faces/mis.xhtml" />
+                                    <p:menuitem value="Visión" url="/faces/vis.xhtml" />
+                                </p:submenu>                                    
+                            </p:column>
+                        </p:submenu>
+                        
+                        <p:submenu label="Inventario" icon="ui-icon-check">
+                            <p:column>
+                                <p:submenu label="Inventario">
+                                    <p:menuitem value="Aplicación" url="/faces/home.xhtml" />
+                                </p:submenu>
+                            </p:column>
+                        </p:submenu>
+                        
+                    </p:megaMenu></center>
+
+                <br></br><br></br>
+                <center>
+                    <p:imageSwitch effect="shuffle"  >                                                          
+                        <img src="resources/images/1.jpg" style="width: 500px; height: 250px"/>
+                        <img src="resources/images/2.jpg" style="width: 500px; height: 250px"/>
+                        <img src="resources/images/3.jpg" style="width: 500px; height: 250px"/>                                                           
+                        <img src="resources/images/4.jpg" style="width: 500px; height: 250px"/>                                                           
+                        <img src="resources/images/5.jpg" style="width: 500px; height: 250px"/>                                                           
+                        <img src="resources/images/6.jpg" style="width: 500px; height: 250px"/>                                                           
+                        <img src="resources/images/7.jpg" style="width: 500px; height: 250px"/>                                                           
+                    </p:imageSwitch>
+                </center>
+                <br></br><br></br>
+
+
+
+                <ui:include src="Plantilla/pie.xhtml"/>
+            </p:layoutUnit>
+
+
+        </p:layout>
+
+      <!--  <p:growl id="growl" sticky="true" showDetail="true" life="3000" />-->
+        <p:dialog widgetVar="dlg" header="Login"  resizable="false">
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:graphicImage name="images/log.png" styleClass="content" style="width: 70px; height: 50px" />
+                <br></br> <br></br> <br></br> <br></br>
+                <h:outputLabel for="username" value="Username:" />
+                <p:inputText id="username" value="#{userLoginView.username}" required="true" label="username" />
+
+                <h:outputLabel for="password" value="Password:" />
+                <p:password id="password" value="#{userLoginView.password}" required="true" label="password" />
+
+                <f:facet name="footer">
+                    <center><p:commandButton value="Login" update="growl" actionListener="#{userLoginView.login()}"
+                                             oncomplete="handleLoginRequest(xhr, status, args)"/>
+                        <p:commandButton value="Cerrar" update="growl" actionListener="#{menuControlador.index()}"
+                                         oncomplete="handleLoginRequest(xhr, status, args)" onclick="dlg.hide()" action="./index.xhtml" />
+                        <br> </br>
+                        <h:outputLink value="javascript:void(0)" onclick="PF('registro').show();" title="registro">
+                            <p:outputLabel value="Crear Cuenta"/>
+                        </h:outputLink>
+
+                    </center>
+                </f:facet>  
+
+            </h:panelGrid>
+
+        </p:dialog>
+
+        <p:growl id="reg" sticky="true" showDetail="true" life="3000" />
+        <p:dialog widgetVar="registro"  header="Registro Usuario" resizable="false">
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel for="nick" value="Nick:" />
+                <p:password id="password" value="#{userLoginView.password}" required="true" label="nick" />
+                <h:outputLabel for="Nombre" value="Nombre:" />
+                <p:password id="password" value="#{userLoginView.password}" required="true" label="nombre" />
+                <h:outputLabel for="password" value="Password:" />
+                <p:password id="password" value="#{userLoginView.password}" required="true" label="password" />
+                <h:outputLabel for="password" value="Repetir Password:" />
+                <p:password id="password" value="#{userLoginView.password}" required="true" label="password" />
+
+                <f:facet name="footer">
+                    <center><p:commandButton value="Aceptar" update="reg" actionListener="#{menuControlador.frmUsuario()}"
+                                             oncomplete="handleLoginRequest(xhr, status, args)"/>
+                        <p:commandButton value="Cerrar" update="reg" actionListener="#{menuControlador.index()}"
+                                         onclick="registro.hide()" action="./index.xhtml" oncomplete="handleLoginRequest(xhr, status, args)"/>
+                    </center>
+                </f:facet>  
+            </h:panelGrid>
+        </p:dialog> 
+
+    </h:body>
+</html>

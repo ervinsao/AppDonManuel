@@ -1,0 +1,267 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
+    http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <ui:composition template="../plantilla/formulario.xhtml">
+            <ui:define name="top">
+                Página que permite manipular los Proveedores
+            </ui:define>
+
+            <ui:define name="contenido">    
+
+                <h:form id="frmProveedor">
+
+                    <p:panel id="proveedorContenido" header="Datos del Proveedor" >  
+
+                        <p:dataTable id="lstProveedor" value="#{proveedorC.lstProveedores}" 
+                                     var="proveedor"  selection="#{proveedorC.objProveedorSel}" rowKey="#{proveedor.id_proveedor}"
+                                     selectionMode="single" paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20" emptyMessage="No se han encontrado registros" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PageLinks} {NextPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown}">
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="RUC">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.ruc_proveedor}"/>
+                            </p:column>                      
+
+                             <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Nombre">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.nombre_proveedor}"/>
+                            </p:column>  
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Apellido">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.apellido_proveedor}"/>
+                            </p:column> 
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Comercial">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.nombre_comercial_proveedor}"/>
+                            </p:column> 
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Dirección">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.direccion_proveedor}"/>
+                            </p:column> 
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Convencional">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.convencional_proveedor}"/>
+                            </p:column> 
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Celular">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.celular_proveedor}"/>
+                            </p:column> 
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Correo">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.correo_proveedor}"/>
+                            </p:column> 
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Banco">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.nombre_banco_proveedor}"/>
+                            </p:column> 
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Cuenta">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{proveedor.cuenta_bancaria_proveedor}"/>
+                            </p:column> 
+                            
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Acciones"/>
+                                </f:facet>
+                                <p:commandButton icon="ui-icon-pencil" title="Editar Proveedor" update=":frmUpdatProveedor" onclick="PF('wglUpdatProveedor').show()">
+                                    <f:setPropertyActionListener value="#{proveedor}" target="#{proveedorC.objProveedorSel}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar Proveedor" update=":frmDeletProveedor" onclick="PF('wglDeletProveedor').show()">
+                                    <f:setPropertyActionListener value="#{proveedor}" target="#{proveedorC.objProveedorSel}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton id="btnNuevo" value="Nuevo Proveedor" icon="ui-icon-newwin" 
+                                                 onclick="PF('wglInsertProveedor').show()" type="button"/>
+                            </f:facet>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>           
+            </ui:define>
+
+            <ui:define name="dialogos">
+                
+                <!--Insertar Proveedor-->
+                <p:dialog widgetVar="wglInsertProveedor" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Insertar Proveedor">
+                    <h:form id="frmInsertProveedor">
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="RUC"/>
+                            <p:inputText id="txtRUC" label="RUC" requiredMessage="Ingrese el RUC" value="#{proveedorC.objProveedor.ruc_proveedor}" required="true"/>                  
+        
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText id="txtNombre" label="Nombre" requiredMessage="Ingrese el nombre" value="#{proveedorC.objProveedor.nombre_proveedor}" required="true"/>                  
+        
+                            <p:outputLabel value="Apellido"/>
+                            <p:inputText id="txtApellido" label="Apellido" requiredMessage="Ingrese el apellido" value="#{proveedorC.objProveedor.apellido_proveedor}" required="true"/>                  
+        
+                            <p:outputLabel value="Nombre Comercial"/>
+                            <p:inputText id="txtNombreComercial" label="Nombre Comercial" requiredMessage="Ingrese el nombre comercial" value="#{proveedorC.objProveedor.nombre_comercial_proveedor}" required="true"/> 
+                            
+                            <p:outputLabel value="Direccion"/>
+                            <p:inputText id="txtDireccion" label="Dirección" requiredMessage="Ingrese la dirección" value="#{proveedorC.objProveedor.direccion_proveedor}" required="true"/>                  
+        
+                            <p:outputLabel value="Convencional"/>
+                            <p:inputText id="txtConvencional" label="Convencional" requiredMessage="Ingrese el telefono convencional" value="#{proveedorC.objProveedor.convencional_proveedor}" required="true"/>                  
+        
+                            <p:outputLabel value="Celular"/>
+                            <p:inputText id="txtCelular" label="Celular" requiredMessage="Ingrese el telefono celular" value="#{proveedorC.objProveedor.celular_proveedor}" required="true"/>                  
+        
+                            <p:outputLabel value="Correo"/>
+                            <p:inputText id="txtCorreo" label="Correo" requiredMessage="Ingrese el correo" value="#{proveedorC.objProveedor.correo_proveedor}" required="true"/>                  
+        
+                            <p:outputLabel value="Banco"/>
+                            <p:inputText id="txtBanco" label="Banco" requiredMessage="Ingrese el banco" value="#{proveedorC.objProveedor.nombre_banco_proveedor}" required="true"/>                  
+        
+                            <p:outputLabel value="Cuenta"/>
+                            <p:inputText id="txtCuenta" label="Cuenta" requiredMessage="Ingrese la cuenta bancaria" value="#{proveedorC.objProveedor.cuenta_bancaria_proveedor}" required="true"/>                  
+        
+                            
+                            
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+                        <p:commandButton value="Ingresar" action="#{proveedorC.insertarProveedor()}" update=":frmProveedor:lstProveedor" ajax="false"/>
+                        <p:commandButton value="Cerrar" onclick="wglInsertProveedor.hiden()" process="@this" type="reset"/>
+                    </h:form>
+                </p:dialog>
+
+                <!--Actualizar Proveedor-->
+                <p:dialog widgetVar="wglUpdatProveedor" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Modificar Proveedor">
+                    <h:form id="frmUpdatProveedor">
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="RUC"/>
+                            <p:inputText id="txtRUC" label="RUC" value="#{proveedorC.objProveedorSel.ruc_proveedor}" required="true" />                       
+                        
+                        <p:outputLabel value="Nombre"/>
+                            <p:inputText id="txtNombre" label="Nombre" value="#{proveedorC.objProveedorSel.nombre_proveedor}" required="true" /> 
+                            
+                            <p:outputLabel value="Apellido"/>
+                            <p:inputText id="txtApellido" label="Apellido" value="#{proveedorC.objProveedorSel.apellido_proveedor}" required="true" /> 
+                            
+                            <p:outputLabel value="Comercial"/>
+                            <p:inputText id="txtComercial" label="Comercial" value="#{proveedorC.objProveedorSel.nombre_comercial_proveedor}" required="true" /> 
+                            
+                            <p:outputLabel value="Direccion"/>
+                            <p:inputText id="txtDireccion" label="Dirección" value="#{proveedorC.objProveedorSel.direccion_proveedor}" required="true" /> 
+                            
+                            <p:outputLabel value="Convencional"/>
+                            <p:inputText id="txtConvencional" label="Convencional" value="#{proveedorC.objProveedorSel.convencional_proveedor}" required="true" /> 
+                            
+                            <p:outputLabel value="Celular"/>
+                            <p:inputText id="txtCelular" label="Celular" value="#{proveedorC.objProveedorSel.celular_proveedor}" required="true" /> 
+                            
+                            <p:outputLabel value="Correo"/>
+                            <p:inputText id="txtCorreo" label="Correo" value="#{proveedorC.objProveedorSel.correo_proveedor}" required="true" /> 
+                            
+                            <p:outputLabel value="Banco"/>
+                            <p:inputText id="txtBanco" label="Banco" value="#{proveedorC.objProveedorSel.nombre_banco_proveedor}" required="true" /> 
+                            
+                            <p:outputLabel value="Cuenta"/>
+                            <p:inputText id="txtCuenta" label="Cuenta" value="#{proveedorC.objProveedorSel.cuenta_bancaria_proveedor}" required="true" /> 
+                                                              
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+
+                        <p:commandButton value="Modificar" action="#{proveedorC.actualizarProveedor()}" update=":frmProveedor:lstProveedor" ajax="false"/>
+                        <p:commandButton value="Cerrar" onclick="wglUpdatProveedor.hiden()" process="@this" type="reset"/>
+                    </h:form>
+                </p:dialog>
+
+                <!--Eliminar Proveedor-->
+                <p:dialog widgetVar="wglDeletProveedor" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Eliminar Proveedor">
+                    <h:form id="frmDeletProveedor">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="RUC"/>
+                            <p:inputText id="txtRUC" label="RUc" value="#{proveedorC.objProveedorSel.ruc_proveedor}" required="true" disabled="true"/>
+
+                            <p:outputLabel value="Nombre"/>
+                            <p:inputText id="txtNombre" label="Nombre" value="#{proveedorC.objProveedorSel.nombre_proveedor}" required="true" disabled="true"/>
+
+                            <p:outputLabel value="Apellido"/>
+                            <p:inputText id="txtApellido" label="Apellido" value="#{proveedorC.objProveedorSel.apellido_proveedor}" required="true" disabled="true"/>
+
+                            <p:outputLabel value="Comercial"/>
+                            <p:inputText id="txtComercial" label="Comercial" value="#{proveedorC.objProveedorSel.nombre_comercial_proveedor}" required="true" disabled="true"/>
+
+                            <p:outputLabel value="Direccion"/>
+                            <p:inputText id="txtDireccion" label="Dirección" value="#{proveedorC.objProveedorSel.direccion_proveedor}" required="true" disabled="true"/>
+
+                            <p:outputLabel value="Convencional"/>
+                            <p:inputText id="txtConvencional" label="Convencional" value="#{proveedorC.objProveedorSel.convencional_proveedor}" required="true" disabled="true"/>
+
+                            <p:outputLabel value="Celular"/>
+                            <p:inputText id="txtCelular" label="Celular" value="#{proveedorC.objProveedorSel.celular_proveedor}" required="true" disabled="true"/>
+
+                            <p:outputLabel value="Correo"/>
+                            <p:inputText id="txtCorreo" label="Correo" value="#{proveedorC.objProveedorSel.correo_proveedor}" required="true" disabled="true"/>
+
+                            <p:outputLabel value="Banco"/>
+                            <p:inputText id="txtBanco" label="Banco" value="#{proveedorC.objProveedorSel.nombre_banco_proveedor}" required="true" disabled="true"/>
+
+                            <p:outputLabel value="Cuenta"/>
+                            <p:inputText id="txtCuenta" label="Cuenta" value="#{proveedorC.objProveedorSel.cuenta_bancaria_proveedor}" required="true" disabled="true"/>
+
+                            
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+                        <p:commandButton value="Eliminar" actionListener="#{proveedorC.eliminarProveedor()}" update=":frmProveedor:lstProveedor" action="./frmProveedor.xhtml" immediate="true"/>
+                        <p:commandButton value="Cerrar" action="./frmPersona.xhtml" immediate="true"/>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
+   

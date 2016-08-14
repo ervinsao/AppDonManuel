@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "
+    http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+
+        <ui:composition template="../plantilla/formulario.xhtml">
+            <ui:define name="top">
+                Página que permite manipular los Tipos de Materias
+            </ui:define>
+
+            <ui:define name="contenido">    
+
+                <h:form id="frmTipoMateria">
+
+                    <p:panel id="tipoMateriaContenido" header="Datos de Tipo de Materia" >  
+
+                        <p:dataTable id="lstTipoMateria" value="#{tipoMateriaC.lstTiposMaterias}" 
+                                     var="tipoMateria"  selection="#{tipoMateriaC.objTipoMateriaSel}" rowKey="#{tipoMateria.id_tipo_materia}"
+                                     selectionMode="single" paginator="true" rows="10" rowsPerPageTemplate="5,10,15,20" emptyMessage="No se han encontrado registros" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PageLinks} {NextPageLink} {PageLinks} {LastPageLink} {RowsPerPageDropdown}">
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Descripción:">
+                                    </h:outputText>
+                                </f:facet>
+                                <h:outputText value="#{tipoMateria.descripcion_tipo_materia}"/>
+                            </p:column>                      
+
+                            <p:column>
+                                <f:facet name="header">
+                                    <h:outputText value="Acciones"/>
+                                </f:facet>
+                                <p:commandButton icon="ui-icon-pencil" title="Editar Tipo de Materia" update=":frmUpdatTipoMateria" onclick="PF('wglUpdatTipoMateria').show()">
+                                    <f:setPropertyActionListener value="#{tipoMateria}" target="#{tipoMateriaC.objTipoMateriaSel}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar Tipo de Materia" update=":frmDeletTipoMateria" onclick="PF('wglDeletTipoMateria').show()">
+                                    <f:setPropertyActionListener value="#{tipoMateria}" target="#{tipoMateriaC.objTipoMateriaSel}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <f:facet name="footer">
+                                <p:commandButton id="btnNuevo" value="Nuevo Tipo de Materia" icon="ui-icon-newwin" 
+                                                 onclick="PF('wglInsertTipoMateria').show()" type="button"/>
+                            </f:facet>
+
+                        </p:dataTable>
+                    </p:panel>
+                </h:form>           
+            </ui:define>
+
+            <ui:define name="dialogos">
+                
+                <!--Insertar Tipo Materia-->
+                <p:dialog widgetVar="wglInsertTipoMateria" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Insertar Tipo de Materia">
+                    <h:form id="frmInsertTipoMateria">
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="Descripcion"/>
+                            <p:inputText id="txtDescripcion" label="Descripción" requiredMessage="Ingrese el tipo de materia" value="#{tipoMateriaC.objTipoMateria.descripcion_tipo_materia}" required="true"/>                  
+        
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+                        <p:commandButton value="Ingresar" action="#{tipoMateriaC.insertarTipoMateria()}" update=":frmTipoMateria:lstTipoMateria" ajax="false"/>
+                        <p:commandButton value="Cerrar" onclick="wglInsertTipoMateria.hiden()" process="@this" type="reset"/>
+                    </h:form>
+                </p:dialog>
+
+                <!--Actualizar Tipo Materia-->
+                <p:dialog widgetVar="wglUpdatTipoMateria" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Modificar Tipo de Materia">
+                    <h:form id="frmUpdatTipoMateria">
+                        <p:panelGrid columns="2">
+
+                            <p:outputLabel value="Descripcion"/>
+                            <p:inputText id="txtDescripcion" label="Descripción" value="#{tipoMateriaC.objTipoMateriaSel.descripcion_tipo_materia}" required="true" />                       
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+
+                        <p:commandButton value="Modificar" action="#{tipoMateriaC.actualizarTipoMateria()}" update=":frmTipoMateria:lstTipoMateria" ajax="false"/>
+                        <p:commandButton value="Cerrar" onclick="wglUpdatTipoMateria.hiden()" process="@this" type="reset"/>
+                    </h:form>
+                </p:dialog>
+
+                <!--Eliminar Tipo Materia-->
+                <p:dialog widgetVar="wglDeletTipoMateria" modal="true" resizable="false" showEffect="fade" hideEffect="explode" header="Eliminar Tipo Materia">
+                    <h:form id="frmDeletTipoMateria">
+                        <p:panelGrid columns="2">
+                            <p:outputLabel value="Descripcion"/>
+                            <p:inputText id="txtDescripcion" label="Descripción" value="#{tipoMateriaC.objTipoMateriaSel.descripcion_tipo_materia}" required="true" disabled="true"/>
+
+                        </p:panelGrid>   
+                        <p:separator></p:separator>
+                        <p:commandButton value="Eliminar" actionListener="#{tipoMateriaC.eliminarTipoMateria()}" update=":frmTipoMateria:lstTipoMateria" action="./frmTipoMateria.xhtml" immediate="true"/>
+                        <p:commandButton value="Cerrar" action="./frmPersona.xhtml" immediate="true"/>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
+   
